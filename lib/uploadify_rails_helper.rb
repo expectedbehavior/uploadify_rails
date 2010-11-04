@@ -20,6 +20,8 @@ module UploadifyRailsHelper
     uploadify_options(options) #sets uploadify options
     javascript_tag(%(
     $(document).ready(function() {
+      var script_data_fields = {};
+      #{uploadify_options[:fields].map{ |x| "script_data_fields[$('##{x}')[0].name] = $('##{x}').val();"}.join("\n")}
       $('##{uploadify_options[:id]}').uploadify({
         uploader      : '#{uploadify_options[:uploader]}',
         method        : '#{uploadify_options[:uploader]}',
@@ -44,12 +46,11 @@ module UploadifyRailsHelper
             return false;
           }
         },
-        scriptData  : {
+        scriptData  : $.extend({
             'format'                  : '#{uploadify_options[:format]}',
             '#{get_session_key_name}' : encodeURIComponent('#{get_session_key}'),
             'authenticity_token'      : encodeURIComponent('#{get_authenticity_token}'),
-            #{uploadify_options[:fields].map{ |x| "'#{x}': $('##{x}').val()"}.join(",\n")}
-        }
+        }, script_data_fields)
       });
     }
     );))
