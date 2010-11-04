@@ -12,7 +12,8 @@ module UploadifyRailsHelper
                             :cancel_image            => "/images/cancel.png",
                             :method                  => 'POST',
                             :fields                  => nil, #accepts an Array of field ids to include
-                            :uploader                => '/javascripts/uploadify/uploadify.swf' }.merge(options)
+                            :uploader                => '/javascripts/uploadify/uploadify.swf',
+                            :auto                    => false}.merge(options)
   end
   
   def javascript_uploadify_tag(options = {})
@@ -29,12 +30,13 @@ module UploadifyRailsHelper
         buttonText    : '#{uploadify_options[:button_text]}',
         fileDesc      : '#{uploadify_options[:dialog_file_description]} (#{allowed_extensions})',
         fileExt       : '#{allowed_extensions}',
-        sizeLimit     : #{uploadify_options[:max_size]},    
+        sizeLimit     : #{uploadify_options[:max_size]},
+        auto          : #{uploadify_options[:auto]},
         multi         : #{uploadify_options[:allow_multiple_files] },
         onComplete    : function(event, queueID, fileObj, response, data) { eval(response) },
         onAllComplete : function(event, data){
           $('#uploadify_cancel').hide('blind');
-          $('#uploadify_submit').show('blind');      
+          $('#uploadify_submit').show('blind');
         },
         onSelect: function(event, queueID, fileObj){
           if (fileObj.size > #{uploadify_options[:max_size]}) {
