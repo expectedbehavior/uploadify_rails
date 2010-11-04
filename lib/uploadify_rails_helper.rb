@@ -47,7 +47,8 @@ module UploadifyRailsHelper
         scriptData  : {
             'format'                  : '#{uploadify_options[:format]}',
             '#{get_session_key_name}' : encodeURIComponent('#{get_session_key}'),
-            'authenticity_token'      : encodeURIComponent('#{get_authenticity_token}')
+            'authenticity_token'      : encodeURIComponent('#{get_authenticity_token}'),
+            #{uploadify_options[:fields].map{ |x| "'#{x}': $('##{x}').val()"}.join(",\n")}
         }
       });
     }
